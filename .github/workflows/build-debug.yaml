@@ -25,36 +25,58 @@ jobs:
         with:
           go-version: "1.20"
 
-#      - uses: actions/cache@v4
-#        with:
-#          path: |
-#            ~/.cache/go-build
-#            ~/go/pkg/mod
-#          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-#          restore-keys: |
-#            ${{ runner.os }}-go-
-#
-#            # - name: Signing properties
-#            #   env:
-#            #     SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-#            #     SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-#            #     SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-#            #   run: |
-#            #     touch signing.properties
-#            #     echo keystore.password="$SIGNING_STORE_PASSWORD" > signing.properties
-#            #     echo key.alias="$SIGNING_KEY_ALIAS" >> signing.properties
-#            #     echo key.password="$SIGNING_KEY_PASSWORD" >> signing.properties
+      #      - uses: actions/cache@v4
+      #        with:
+      #          path: |
+      #            ~/.cache/go-build
+      #            ~/go/pkg/mod
+      #          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+      #          restore-keys: |
+      #            ${{ runner.os }}-go-
+      #
+      #            # - name: Signing properties
+      #            #   env:
+      #            #     SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+      #            #     SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+      #            #     SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      #            #   run: |
+      #            #     touch signing.properties
+      #            #     echo keystore.password="$SIGNING_STORE_PASSWORD" > signing.properties
+      #            #     echo key.alias="$SIGNING_KEY_ALIAS" >> signing.properties
+      #            #     echo key.password="$SIGNING_KEY_PASSWORD" >> signing.properties
 
       #     echo "cat signing.properties"
       #     cat signing.properties
 
-      - name: Build
+      - name: Build core
         if: success()
-        run: |
-          ./gradlew: --no-daemon common:assembleRelease
-          ./gradlew: --no-daemon core:assembleRelease
-          ./gradlew: --no-daemon hideapi:assembleRelease
-          ./gradlew: --no-daemon service:assembleRelease
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: --no-daemon core:assembleRelease
+
+      - name: Build core
+        if: success()
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: --no-daemon core:assembleRelease
+
+      - name: Build common
+        if: success()
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: --no-daemon common:assembleRelease
+
+      - name: Build hideapi
+        if: success()
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: --no-daemon hideapi:assembleRelease
+
+      - name: Build service
+        if: success()
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: --no-daemon service:assembleRelease
 
 
       - name: Upload Aritfact (common)
