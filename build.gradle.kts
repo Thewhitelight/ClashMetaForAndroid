@@ -48,7 +48,7 @@ subprojects {
 
             externalNativeBuild {
                 cmake {
-                    abiFilters("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+                    abiFilters("arm64-v8a", "armeabi-v7a")
                 }
             }
 
@@ -74,17 +74,17 @@ subprojects {
         productFlavors {
             flavorDimensions("feature")
 
-            create("meta-alpha") {
-                isDefault = true
-                dimension = flavorDimensionList[0]
-                versionNameSuffix = ".Meta-Alpha"
-
-                buildConfigField("boolean", "PREMIUM", "Boolean.parseBoolean(\"false\")")
-
-                if (isApp) {
-                    applicationIdSuffix = ".meta"
-                }
-            }
+//            create("meta-alpha") {
+//                isDefault = true
+//                dimension = flavorDimensionList[0]
+//                versionNameSuffix = ".Meta-Alpha"
+//
+//                buildConfigField("boolean", "PREMIUM", "Boolean.parseBoolean(\"false\")")
+//
+//                if (isApp) {
+//                    applicationIdSuffix = ".meta"
+//                }
+//            }
 
             create("meta") {
 
@@ -103,9 +103,9 @@ subprojects {
             getByName("meta") {
                 java.srcDirs("src/foss/java")
             }
-            getByName("meta-alpha") {
-                java.srcDirs("src/foss/java")
-            }
+//            getByName("meta-alpha") {
+//                java.srcDirs("src/foss/java")
+//            }
         }
 
         signingConfigs {

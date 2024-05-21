@@ -1,7 +1,7 @@
 name: Build Debug
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [ opened, reopened, synchronize ]
   workflow_dispatch:
 
 jobs:
@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      
+
       - name: Checkout submodules
         run: git submodule update --init --recursive --remote --force
 
@@ -33,33 +33,59 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-
-      # - name: Signing properties
-      #   env:
-      #     SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-      #     SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-      #     SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-      #   run: |
-      #     touch signing.properties
-      #     echo keystore.password="$SIGNING_STORE_PASSWORD" > signing.properties
-      #     echo key.alias="$SIGNING_KEY_ALIAS" >> signing.properties
-      #     echo key.password="$SIGNING_KEY_PASSWORD" >> signing.properties
             
+            # - name: Signing properties
+            #   env:
+            #     SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+            #     SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+            #     SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+            #   run: |
+            #     touch signing.properties
+            #     echo keystore.password="$SIGNING_STORE_PASSWORD" > signing.properties
+            #     echo key.alias="$SIGNING_KEY_ALIAS" >> signing.properties
+            #     echo key.password="$SIGNING_KEY_PASSWORD" >> signing.properties
+
       #     echo "cat signing.properties"
       #     cat signing.properties
 
       - name: Build
         if: success()
         uses: gradle/gradle-build-action@v3
-        with:
-          arguments: --no-daemon proxy:assembleDebug
+        run: |
+          ./gradlew: --no-daemon common:assembleRelease
+          ./gradlew: --no-daemon core:assembleRelease
+          ./gradlew: --no-daemon hideapi:assembleRelease
+          ./gradlew: --no-daemon service:assembleRelease
 
-          
-      - name: Upload Aritfact
+
+      - name: Upload Aritfact (common)
         uses: actions/upload-artifact@v4
         if: ${{  success() }}
         with:
-          name: CMFA Debug Unsigned AAR
+          name: CMFA Debug Unsigned APK (universal)
           path: |
-            proxy/build/outputs/aar/*.aar
-      
+            common/build/outputs/aar/*.aar
+
+      - name: Upload Aritfact (core)
+        uses: actions/upload-artifact@v4
+        if: ${{  success() }}
+        with:
+          name: CMFA Debug Unsigned APK (arm64-v8a)
+          path: |
+            core/build/outputs/aar/*.aar
+
+      - name: Upload Aritfact (hideapi)
+        uses: actions/upload-artifact@v4
+        if: ${{  success() }}
+        with:
+          name: CMFA Debug Unsigned APK (armeabi-v7a)
+          path: |
+            hideapi/build/outputs/aar/*.aar
+
+      - name: Upload Aritfact (service)
+        uses: actions/upload-artifact@v4
+        if: ${{  success() }}
+        with:
+          name: CMFA Debug Unsigned APK (x86_64)
+          path: |
+            service/build/outputs/aar/*.aar
