@@ -52,45 +52,14 @@ jobs:
         if: success()
         uses: gradle/gradle-build-action@v3
         with:
-          arguments: --no-daemon app:assembleMeta-AlphaRelease
+          arguments: --no-daemon proxy:assembleDebug
 
           
-      - name: Upload Aritfact (universal)
+      - name: Upload Aritfact
         uses: actions/upload-artifact@v4
         if: ${{  success() }}
         with:
-          name: CMFA Debug Unsigned APK (universal) 
+          name: CMFA Debug Unsigned AAR
           path: |
-            app/build/outputs/apk/meta-alpha/release/*-universal-*.apk
+            proxy/build/outputs/aar/*.aar
       
-      - name: Upload Aritfact (arm64-v8a)
-        uses: actions/upload-artifact@v4
-        if: ${{  success() }}
-        with:
-          name: CMFA Debug Unsigned APK (arm64-v8a)
-          path: |
-            app/build/outputs/apk/meta-alpha/release/*-arm64-v8a-*.apk
-      
-      - name: Upload Aritfact (armeabi-v7a)
-        uses: actions/upload-artifact@v4
-        if: ${{  success() }}
-        with:
-          name: CMFA Debug Unsigned APK (armeabi-v7a)
-          path: |
-            app/build/outputs/apk/meta-alpha/release/*-armeabi-v7a-*.apk
-      
-      - name: Upload Aritfact (x86_64)
-        uses: actions/upload-artifact@v4
-        if: ${{  success() }}
-        with:
-          name: CMFA Debug Unsigned APK (x86_64)
-          path: |
-            app/build/outputs/apk/meta-alpha/release/*-x86_64-*.apk
-      
-      - name: Upload Aritfact (x86)
-        uses: actions/upload-artifact@v4
-        if: ${{  success() }}
-        with:
-          name: CMFA Debug Unsigned APK (x86)
-          path: |
-            app/build/outputs/apk/meta-alpha/release/*-x86-*.apk
