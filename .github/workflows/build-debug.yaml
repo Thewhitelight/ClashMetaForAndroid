@@ -77,7 +77,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{  success() }}
         with:
-          name: CMFA Debug Unsigned APK (universal)
+          name: CMFA AAR (common)
           path: |
             common/build/outputs/aar/*.aar
 
@@ -85,7 +85,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{  success() }}
         with:
-          name: CMFA Debug Unsigned APK (arm64-v8a)
+          name: CMFA AAR (core)
           path: |
             core/build/outputs/aar/*.aar
 
@@ -93,7 +93,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{  success() }}
         with:
-          name: CMFA Debug Unsigned APK (armeabi-v7a)
+          name: CMFA AAR (hideapi)
           path: |
             hideapi/build/outputs/aar/*.aar
 
@@ -101,6 +101,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{  success() }}
         with:
-          name: CMFA Debug Unsigned APK (x86_64)
+          name: CMFA AAR (service)
           path: |
             service/build/outputs/aar/*.aar
